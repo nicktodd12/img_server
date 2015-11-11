@@ -22,13 +22,13 @@ describe('Validate Post Functionality', function() {
 		
 		var currentID;
 		
-		request.post(url("/post"), {json:{'author':'JD', 'body':'woooooo'}}, function(err, res, body){
+		request.post(url("/post"), {json:{'body':'woooooo'}}, function(err, res, body){
 			expect(body['author']).toEqual('JD');
 			expect(body['body']).toEqual('woooooo');
 			currentID = body["id"];
 			
-			request.post(url("/post"), {json:{'author':'Tester', 'body':'YEYAYAY'}}, function(err, res, body){
-				expect(body['author']).toEqual('Tester');
+			request.post(url("/post"), {json:{'body':'YEYAYAY'}}, function(err, res, body){
+				expect(body['author']).toEqual('JD');
 				expect(body['body']).toEqual('YEYAYAY');
 				expect(body['id']).toEqual(currentID + 1); 
 				
