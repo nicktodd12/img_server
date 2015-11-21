@@ -1,7 +1,7 @@
-var initialPosts = [{'author':'JD', 'body':'woooooo', 'id':0}, {'author':'JD', 'body':'hello', 'id':1}, {'author':'JD', 'body':'these are the initial posts', 'id':2}];
-var author = "JD";
-var id = 3;
-
+var _posts = require('./posts.json');
+var author = "jvp1test";
+var id = 18;
+	
 exports.setup = function(app) {
 	app.get('/posts/:id*?', getPosts)
 	app.post('/post', addPost)
@@ -14,16 +14,23 @@ function addPost(req, res) {
 	req.body['date'] = new Date()
 	req.body['comments'] = []
 	id++
-	initialPosts.push(req.body)
+	_posts.unshift(req.body)
     res.send(req.body)
 }
 
 function getPosts(req, res) {
-	
 	var id = req.params.id
 	if (!id) {
-		res.json(initialPosts)
+		res.json({posts : _posts})
 	} else {
-		res.json(initialPosts[id]);
+		res.json({posts: findPostById(id)});
 	}
 } 
+
+function findPostById(id){
+	for(var i = 0; i < _posts.length; i++){
+		if(_posts[i]['id'] == id)
+			return [_posts[i]];
+	}
+	return _posts
+}
