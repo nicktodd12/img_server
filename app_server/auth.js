@@ -53,12 +53,6 @@ function login(req, res) {
 		_sessionUser[sessionKey] = userObj
 		res.cookie(cookieKey, sessionKey,
 			{maxAge: 3600 * 1000, httpOnly: true})
-			
-		redis.hmset(res.cookie[cookieKey], userObj);
-
-		redis.hgetall(res.cookie[cookieKey], function(err, userObj){
-			console.log(res.cookie[cookieKey] + ' mapped to '+userObj);
-		});
 
 		var msg = {username: username, result: 'success'}
 		res.send(msg)
