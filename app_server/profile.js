@@ -21,7 +21,14 @@ exports.setup = function(app) {
 }
 
 function getStatuses(req, res) {
-	var users = req.params.users.split(",")
+	var users;
+	if(req.params.users != undefined) {
+		if(req.params.users.indexOf(",") != -1){
+			users = req.params.users.split(",") 
+		} else{
+			users = req.params.users
+		}
+	}
 	model.Profile.find({username :{$in : users}}).exec(function(err, p){
 		var statuses = [];
 		for(var i = 0; i < p.length; i++){
@@ -77,7 +84,7 @@ function putFollowing(req, res){
 				if(add){
 					following.push(req.params.user);
 					model.Profile.update({_id : p[0]._id}, {following : following}).exec(function(err, updated){
-						res.json({username: updated.username, following: updated.following});
+						res.json({username: updated.username, following: following});
 					});
 				} else {
 					res.json({username: p[0].username, following: p[0].following});
