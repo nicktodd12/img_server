@@ -1,6 +1,7 @@
 var md5 = require('md5');
 var _posts = require('./samplePosts.json');
 var model = require('./model.js');
+var redis = require('redis').createClient(process.env.REDIS_URL);
 
 var cookieKey = 'sid'
 var _sessionUser = {}
@@ -53,6 +54,12 @@ function login(req, res) {
 		res.cookie(cookieKey, sessionKey,
 			{maxAge: 3600 * 1000, httpOnly: true})
 			
+		redis.hmset(res.cookie[cookieKey], userObj);
+
+		redis.hgetall(res.cookie[cookieKey], function(err, userObj){
+			console.log(res.cookie[cookieKey] + ' mapped to '+userObj);
+		});
+
 		var msg = {username: username, result: 'success'}
 		res.send(msg)
 	})
