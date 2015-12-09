@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var url = process.env.MONGO_URL;
+var url = process.env.MONGOLAB_URI;
 console.log("MONGO URL ",url)
 mongoose.connect(url);
 function done(){
