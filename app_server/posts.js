@@ -13,12 +13,12 @@ function addImage(req, res) {
 	//if there is an image
 	if(req.file){
 		var publicName = md5("random image name" + new Date().getTime());
-
+		var image = new model.Image({
+			date: new Date()
+		});
 		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
-			var post = new model.Image({
-				img: result.url,
-				date: new Date()
-			});
+
+			imgage.img = result.url;
 			post.save(function(err, result){
 				if(err) return console.error(err);
 				res.json({images: [image]});
@@ -34,6 +34,7 @@ function addImage(req, res) {
 		//we need an image
 		res.sendStatus(400);
 	}
+	console.log("request was ", req);
 }
 /*
 function getPosts(req, res) {
