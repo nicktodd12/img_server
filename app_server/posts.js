@@ -40,7 +40,7 @@ function addImage(req, res) {
 function getImages(req, res) {
 	var id = req.params.id
 	if (!id) {
-			model.Image.find({}, $orderby: { date : -1 } })
+			model.Image.find({ $query: {}, $orderby: { date : -1 }})
 			.limit(10).exec(function(err, returnedImages){
 				res.json({images : returnedImages})
 			});
