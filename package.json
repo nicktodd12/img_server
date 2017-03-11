@@ -1,7 +1,7 @@
 {
-  "name": "jdnetserver",
+  "name": “img-server”,
   "version": "1.0.0",
-  "description": "server for JDNet",
+  "description": “image server for small wedding app“,
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

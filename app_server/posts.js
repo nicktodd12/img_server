@@ -5,28 +5,23 @@ var stream = require('stream');
 var cloudinary = require('cloudinary');
 	
 exports.setup = function(app) {
-	app.get('/posts/:id*?', getPosts)
-	app.post('/post', multer().single('image'), addPost)
-	app.put('/posts/:id*?', putPosts)
+	app.get(‘/img/:id*?', getPosts)
+	app.post('/img', multer().single('image'), addImage)
 }
 
-function addPost(req, res) {
-	var post = new model.Post({
-		author: req.username.username,
-		body: req.body.body,
-		date: new Date(),
-		comments: []
-	});
-	
+function addImage(req, res) {
 	//if there is an image
 	if(req.file){
-		var publicName = req.body.title
+		var publicName = md5(“random image name” + new Date().getTime());
 
-		var uploadStream = cloudinary.uploader.upload_stream(function(result) {    	
-			post.img = result.url;
+		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
+			var post = new model.Post({
+				img: result.url,
+				date: new Date()
+			});  	
 			post.save(function(err, result){
 				if(err) return console.error(err);
-				res.json({posts: [post]});
+				res.json({images: [image]});
 			});
 		}, { public_id: publicName })	
 
@@ -36,11 +31,8 @@ function addPost(req, res) {
 		s.pipe(uploadStream)
 		s.on('end', uploadStream.end)
 	} else {
-		//otherwise just post without an image
-		post.save(function(err, result){
-			if(err) return console.error(err);
-			res.json({posts : [post]});
-		});
+		//we need an image
+		res.sendStatus(400);
 	}
 }
 
@@ -60,50 +52,4 @@ function getPosts(req, res) {
 			res.json({posts : posts})
 		});
 	}
-}
-
-function putPosts(req, res) {
-	var id = req.params.id;
-	var cid = req.body.commentId;
-	var body = req.body.body;
-	
-	model.Post.find({_id : id}).exec(function(err, post){
-		
-		//if we are updating the body of a post
-		if(!cid){
-			model.Post.update({_id : post[0]._id}, {body : body}).exec(function(err, p){
-				model.Post.find({_id : id}).exec(function(err, posts){
-					res.json({posts: posts})
-				});
-			});
-		} else {
-			var comments = post[0].comments;
-			//if we are adding a comment
-			if(cid == -1){
-				comments.push({
-					commentId : md5(new Date().getTime() + req.username.username),
-					author : req.username.username,
-					body : body,
-					date : new Date()
-				});
-				model.Post.update({_id : post[0]._id}, {comments : comments}).exec(function(err, p){
-					model.Post.find({_id : id}).exec(function(err, posts){
-						res.json({posts: posts})
-					});
-				});
-			} else {
-				//if we are updating a comment
-				for(var i = 0; i < comments.length; i++){
-					if(comments[i].commentId == cid){
-						comments[i].body = body;
-					}
-				}
-				model.Post.update({_id : post[0]._id}, {comments : comments}).exec(function(err, p){
-					model.Post.find({_id : id}).exec(function(err, posts){
-						res.json({posts: posts})
-					});
-				});
-			}
-		}
-	});
 }
