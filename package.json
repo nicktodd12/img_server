@@ -1,5 +1,5 @@
 {
-  "name": “img-server”,
+  "name": “imgserver”,
   "version": "1.0.0",
   "description": “image server for small wedding app“,
   "main": "index.js",
