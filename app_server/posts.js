@@ -12,6 +12,7 @@ exports.setup = function(app) {
 function addImage(req, res) {
 	//if there is an image
 	if(req.file){
+		console.log("request file was ", req.file);
 		var publicName = md5("random image name" + new Date().getTime());
 		var image = new model.Image({
 			date: new Date()
@@ -31,10 +32,10 @@ function addImage(req, res) {
 		s.pipe(uploadStream)
 		s.on('end', uploadStream.end)
 	} else {
+		console.log("no image in request");
 		//we need an image
 		res.sendStatus(400);
 	}
-	console.log("request was ", req);
 }
 
 function getImages(req, res) {
