@@ -18,7 +18,7 @@ function addImage(req, res) {
 		});
 		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
-			imgage.img = result.url;
+			image.img = result.url;
 			image.save(function(err, result){
 				if(err) return console.error(err);
 				res.json({images: [image]});
