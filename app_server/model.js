@@ -10,4 +10,4 @@ var imgSchema = new mongoose.Schema({
     img: String
 });
 
-exports.Image = mongoose.model(‘img’, imgSchema);
+exports.Image = mongoose.model('img', imgSchema);
