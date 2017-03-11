@@ -3,27 +3,27 @@ var model = require('./model.js');
 var multer = require('multer');
 var stream = require('stream');
 var cloudinary = require('cloudinary');
-	
+
 exports.setup = function(app) {
-	app.get(‘/img/:id*?', getPosts)
+	app.get('/img/:id*?', getPosts)
 	app.post('/img', multer().single('image'), addImage)
 }
 
 function addImage(req, res) {
 	//if there is an image
 	if(req.file){
-		var publicName = md5(“random image name” + new Date().getTime());
+		var publicName = md5("random image name" + new Date().getTime());
 
 		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 			var post = new model.Post({
 				img: result.url,
 				date: new Date()
-			});  	
+			});
 			post.save(function(err, result){
 				if(err) return console.error(err);
 				res.json({images: [image]});
 			});
-		}, { public_id: publicName })	
+		}, { public_id: publicName })
 
 		//actually upload the image
 		var s = new stream.PassThrough()
