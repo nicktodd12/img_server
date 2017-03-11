@@ -18,10 +18,6 @@ app.use(function(req, res, next) {
 	else
 		next();
 })
-
-if (process.env.NODE_ENV !== "production") {
-    require('dotenv').load()
-}
 require('./app_server/posts.js').setup(app)
 
 // Get the port from the environment, i.e., Heroku sets it
