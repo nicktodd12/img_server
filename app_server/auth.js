@@ -1,5 +1,4 @@
 var md5 = require('md5');
-var _posts = require('./samplePosts.json');
 var model = require('./model.js');
 var redis = require('redis').createClient(process.env.REDIS_URL);
 
@@ -94,5 +93,7 @@ function register(req, res){
 
 //Included in this file so that I could keep all requests that don't require authorization in one place
 function getSamplePosts(req, res){
-	res.json({posts : _posts});
+	model.SamplePost.find().limit(15).exec(function(err, posts){
+		res.json({posts : posts})
+	});
 }

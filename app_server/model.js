@@ -34,6 +34,14 @@ var postSchema = new mongoose.Schema({
     }]
 })
 
+var sampleSchema = new mongoose.Schema({
+	author: String,
+    body: String,
+    date: Date,
+    img: String
+})
+
 exports.User = mongoose.model('users', userSchema);
 exports.Profile = mongoose.model('profles', profileSchema);
 exports.Post = mongoose.model('posts', postSchema);
+exports.SamplePost = mongoose.model('samplePosts', sampleSchema);
