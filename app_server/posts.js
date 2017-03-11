@@ -5,7 +5,7 @@ var stream = require('stream');
 var cloudinary = require('cloudinary');
 
 exports.setup = function(app) {
-	//app.get('/img/:id*?', getPosts)
+	app.get('/img/:id*?', getImages)
 	app.post('/img', multer().single('image'), addImage)
 }
 
@@ -19,7 +19,7 @@ function addImage(req, res) {
 		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
 			imgage.img = result.url;
-			post.save(function(err, result){
+			image.save(function(err, result){
 				if(err) return console.error(err);
 				res.json({images: [image]});
 			});
@@ -36,21 +36,17 @@ function addImage(req, res) {
 	}
 	console.log("request was ", req);
 }
-/*
-function getPosts(req, res) {
+
+function getImages(req, res) {
 	var id = req.params.id
 	if (!id) {
-		model.Profile.find({username : req.username.username}).exec(function(err, profiles){
-			var following = profiles[0].following;
-			following.push(req.username.username);
-			model.Post.find({ $query: {author : {$in : following}}, $orderby: { date : -1 } })
-			.limit(10).exec(function(err, posts){
-				res.json({posts : posts})
+			model.Image.find({}, $orderby: { date : -1 } })
+			.limit(10).exec(function(err, returnedImages){
+				res.json({images : returnedImages})
 			});
-		});
 	} else {
-		model.Post.find({_id : id}).exec(function(err, posts) {
-			res.json({posts : posts})
+		model.Post.find({_id : id}).exec(function(err, image) {
+			res.json({images : [image]})
 		});
 	}
-}*/
+}
