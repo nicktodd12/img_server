@@ -5,7 +5,7 @@ var stream = require('stream');
 var cloudinary = require('cloudinary');
 
 exports.setup = function(app) {
-	app.get('/img/:id*?', getPosts)
+	//app.get('/img/:id*?', getPosts)
 	app.post('/img', multer().single('image'), addImage)
 }
 
@@ -15,7 +15,7 @@ function addImage(req, res) {
 		var publicName = md5("random image name" + new Date().getTime());
 
 		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
-			var post = new model.Post({
+			var post = new model.Image({
 				img: result.url,
 				date: new Date()
 			});
@@ -35,7 +35,7 @@ function addImage(req, res) {
 		res.sendStatus(400);
 	}
 }
-
+/*
 function getPosts(req, res) {
 	var id = req.params.id
 	if (!id) {
@@ -52,4 +52,4 @@ function getPosts(req, res) {
 			res.json({posts : posts})
 		});
 	}
-}
+}*/
