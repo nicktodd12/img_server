@@ -68,7 +68,7 @@ function checkAuthorization(req, res) {
 	}
 
 	//if the api key is wrong, unauthorized
-	model.AuthKey.find({key : req.body.key}).exec(function(err, authkey) {
+	model.AuthKey.find({authkey : req.body.key}).exec(function(err, authkey) {
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
