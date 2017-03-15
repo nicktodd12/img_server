@@ -10,44 +10,75 @@ exports.setup = function(app) {
 }
 
 function addImage(req, res) {
-	//if there is an image
-	if(req.file){
-		console.log("request file was ", req.file);
-		var publicName = md5("random image name" + new Date().getTime());
-		var image = new model.Image({
-			date: new Date()
-		});
-		var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
-			image.img = result.url;
-			image.save(function(err, result){
-				if(err) return console.error(err);
-				res.json({images: [image]});
-			});
-		}, { public_id: publicName })
-
-		//actually upload the image
-		var s = new stream.PassThrough()
-		s.end(req.file.buffer)
-		s.pipe(uploadStream)
-		s.on('end', uploadStream.end)
-	} else {
-		console.log("no image in request");
-		//we need an image
-		res.sendStatus(400);
+	if (!checkAuthorization(req, res)) {
+		return;
 	}
+
+	if(!req.file) {
+		res.sendStatus(400);
+		return;
+	}
+
+	console.log("request file was ", req.file);
+	var publicName = md5("random image name" + new Date().getTime());
+	var image = new model.Image({
+		date: new Date()
+	});
+	var uploadStream = cloudinary.uploader.upload_stream(function(result) {
+
+		image.img = result.url;
+		image.save(function(err, result){
+			if(err) return console.error(err);
+			res.json({images: [image]});
+		});
+	}, { public_id: publicName })
+
+	//actually upload the image
+	var s = new stream.PassThrough()
+	s.end(req.file.buffer)
+	s.pipe(uploadStream)
+	s.on('end', uploadStream.end)
 }
 
 function getImages(req, res) {
+	if (!checkAuthorization(req, res)) {
+		return;
+	}
+
 	var id = req.params.id
 	if (!id) {
 			model.Image.find({ $query: {}, $orderby: { date : -1 }})
 			.limit(10).exec(function(err, returnedImages){
+				if(err) return console.error(err);
 				res.json({images : returnedImages})
 			});
 	} else {
 		model.Post.find({_id : id}).exec(function(err, image) {
+			if(err) return console.error(err);
 			res.json({images : [image]})
 		});
 	}
+}
+
+function checkAuthorization(req, res) {
+	//if no api key, unauthorized
+	if (!req.key) {
+		res.sendStatus(401);
+		return false;
+	}
+
+	//if the api key is wrong, unauthorized
+	model.AuthKey.findOne({key : req.key})).exec(function(err, authkey) {
+		if (err) {
+			console.log(err);
+			res.sendStatus(500);
+			return false;
+		}
+		if (authkey == null) {
+			res.sendStatus(401);
+			return false;
+		}
+		return true;
+	})
 }

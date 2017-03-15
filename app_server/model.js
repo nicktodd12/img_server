@@ -12,4 +12,9 @@ var imgSchema = new mongoose.Schema({
     img: String
 });
 
+var authSchema = new mongoose.Schema({
+		key: String
+});
+
 exports.Image = mongoose.model('img', imgSchema);
+exports.AuthKey = mongoose.model('auth', authSchema);
