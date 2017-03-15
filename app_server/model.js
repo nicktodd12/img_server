@@ -15,8 +15,8 @@ var imgSchema = new mongoose.Schema({
 });
 
 var authSchema = new mongoose.Schema({
-		key: String
+		authkey: String
 });
 
 exports.Image = mongoose.model('img', imgSchema);
-exports.AuthKey = mongoose.model('auth', authSchema)
+exports.AuthKey = mongoose.model('auth', authSchema);
