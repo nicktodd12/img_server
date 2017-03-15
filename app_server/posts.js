@@ -42,10 +42,6 @@ function addImage(req, res) {
 }
 
 function getImages(req, res) {
-	if (!checkAuthorization(req, res)) {
-		return;
-	}
-
 	var id = req.params.id
 	if (!id) {
 			model.Image.find({ $query: {}, $orderby: { date : -1 }})
@@ -64,6 +60,8 @@ function getImages(req, res) {
 function checkAuthorization(req, res) {
 	//if no api key, unauthorized
 	if (!req.key) {
+		console.log("no key in req");
+		console.log("req was", req);
 		res.sendStatus(401);
 		return false;
 	}
@@ -76,6 +74,7 @@ function checkAuthorization(req, res) {
 			return false;
 		}
 		if (authkey == null) {
+			console.log("authkey is null");
 			res.sendStatus(401);
 			return false;
 		}
