@@ -42,16 +42,6 @@ function addImage(req, res) {
 }
 
 function getImages(req, res) {
-
-	var key = new model.AuthKey({
-		key: "f9b520abf660a0d8216433eb49d4b1de"
-	});
-	key.save(function(err, result){
-		if(err) return console.error(err);
-	});
-
-
-
 	var id = req.params.id
 	if (!id) {
 			model.Image.find({ $query: {}, $orderby: { date : -1 }})
@@ -90,5 +80,5 @@ function checkAuthorization(req, res) {
 			return false;
 		}
 		return true;
-	})
+	});
 }
