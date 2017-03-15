@@ -10,11 +10,6 @@ exports.setup = function(app) {
 }
 
 function addImage(req, res) {
-
-	if (!checkAuthorization(req, res)) {
-		return;
-	}
-
 	if(!req.file) {
 		res.sendStatus(400);
 		return;
@@ -55,30 +50,4 @@ function getImages(req, res) {
 			res.json({images : [image]})
 		});
 	}
-}
-
-function checkAuthorization(req, res) {
-	//if no api key, unauthorized
-	if (!req.body.authkey) {
-		console.log("no authkey in req body");
-		console.log("req", req);
-		console.log("req.body", req.body);
-		res.sendStatus(401);
-		return false;
-	}
-
-	//if the api key is wrong, unauthorized
-	model.AuthKey.find({authkey : req.body.authkey}).exec(function(err, authkey) {
-		if (err) {
-			console.log(err);
-			res.sendStatus(500);
-			return false;
-		}
-		if (authkey == null) {
-			console.log("authkey is null");
-			res.sendStatus(401);
-			return false;
-		}
-		return true;
-	});
 }
