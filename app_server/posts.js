@@ -59,8 +59,8 @@ function getImages(req, res) {
 
 function checkAuthorization(req, res) {
 	//if no api key, unauthorized
-	if (!req.body.key) {
-		console.log("no key in req");
+	if (!req.body.authkey) {
+		console.log("no authkey in req body");
 		console.log("req", req);
 		console.log("req.body", req.body);
 		res.sendStatus(401);
@@ -68,7 +68,7 @@ function checkAuthorization(req, res) {
 	}
 
 	//if the api key is wrong, unauthorized
-	model.AuthKey.find({authkey : req.body.key}).exec(function(err, authkey) {
+	model.AuthKey.find({authkey : req.body.authkey}).exec(function(err, authkey) {
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
