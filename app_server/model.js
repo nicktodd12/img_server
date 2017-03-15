@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 console.log("in model,js");
 var url = process.env.MONGODB_URI;
 mongoose.connect(url);
+mongoose.Promise = global.Promise;
+
 function done(){
 	mongoose.connection.close();
 }
@@ -17,4 +19,4 @@ var authSchema = new mongoose.Schema({
 });
 
 exports.Image = mongoose.model('img', imgSchema);
-exports.AuthKey = mongoose.model('auth', authSchema);
+exports.AuthKey = mongoose.model('auth', authSchema)
