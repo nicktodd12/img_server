@@ -50,7 +50,7 @@ function getImages(req, res) {
 				res.json({images : returnedImages})
 			});
 	} else {
-		model.Post.find({_id : id}).exec(function(err, image) {
+		model.Image.find({_id : id}).exec(function(err, image) {
 			if(err) return console.error(err);
 			res.json({images : [image]})
 		});
@@ -68,7 +68,7 @@ function checkAuthorization(req, res) {
 	}
 
 	//if the api key is wrong, unauthorized
-	model.AuthKey.findOne({key : req.body.key}).exec(function(err, authkey) {
+	model.AuthKey.find({key : req.body.key}).exec(function(err, authkey) {
 		if (err) {
 			console.log(err);
 			res.sendStatus(500);
