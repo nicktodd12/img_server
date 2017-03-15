@@ -62,6 +62,9 @@ function checkAuthorization(req, res) {
 	if (!req.body.key) {
 		console.log("no key in req");
 		console.log("req.body", req.body);
+		console.log("req.key", req.key);
+		console.log("req.headers", req.headers);
+		console.log("req.payload", req.payload);
 		res.sendStatus(401);
 		return false;
 	}
