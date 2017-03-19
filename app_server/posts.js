@@ -17,8 +17,18 @@ function addImage(req, res) {
 
 	console.log("request file was ", req.file);
 	var publicName = md5("random image name" + new Date().getTime());
+	var user = "";
+	if (req.body.user) {
+		user = req.body.user;
+	}
+	var comment = "";
+	if (req.body.comment) {
+		comment = req.body.comment;
+	}
 	var image = new model.Image({
-		date: new Date()
+		date: new Date(),
+		user: user,
+		comment: comment
 	});
 	var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
