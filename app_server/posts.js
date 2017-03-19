@@ -21,14 +21,14 @@ function addImage(req, res) {
 	if (req.body.user) {
 		user = req.body.user;
 	}
-	var comment = "";
-	if (req.body.comment) {
-		comment = req.body.comment;
+	var caption = "";
+	if (req.body.caption) {
+		caption = req.body.caption;
 	}
 	var image = new model.Image({
 		date: new Date(),
 		user: user,
-		comment: comment
+		caption: caption
 	});
 	var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
