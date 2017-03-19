@@ -11,7 +11,9 @@ function done(){
 
 var imgSchema = new mongoose.Schema({
     date: Date,
-    img: String
+    img: String,
+    user: String,
+    caption: String
 });
 
 var authSchema = new mongoose.Schema({
