@@ -69,6 +69,7 @@ function putComment(req, res) {
 
 	if (!id || !req.body.user || !req.body.body) {
 		res.sendStatus(400);
+		return;
 	}
 	model.Image.find({_id : id}).exec(function(err, image) {
 			if(err) return console.error(err);
