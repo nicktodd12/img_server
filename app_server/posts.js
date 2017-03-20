@@ -79,9 +79,12 @@ function putComment(req, res) {
 				body: req.body.body,
 				date: new Date()
 			})
-			model.Image.update({_id : image[0]._id}, {comments : comments}).exec(function(err, updatedImage) {
+			model.Image.update({_id : image[0]._id}, {comments : comments}).exec(function(err, writeResult) {
 				if(err) return console.error(err);
-				res.json({image : updatedImage})
+				model.Image.find({_id : id}).exec(function(err, result) {
+					if(err) return console.error(err);
+					res.json({image : result});
+				});
 			});
 	});
 }
