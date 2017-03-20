@@ -7,6 +7,7 @@ var cloudinary = require('cloudinary');
 exports.setup = function(app) {
 	app.get('/img/:id*?', getImages)
 	app.post('/img', multer().single('image'), addImage)
+	app.put('/img/:id*?', putComment)
 }
 
 function addImage(req, res) {
@@ -28,7 +29,8 @@ function addImage(req, res) {
 	var image = new model.Image({
 		date: new Date(),
 		user: user,
-		caption: caption
+		caption: caption,
+		comments : []
 	});
 	var uploadStream = cloudinary.uploader.upload_stream(function(result) {
 
@@ -57,7 +59,29 @@ function getImages(req, res) {
 	} else {
 		model.Image.find({_id : id}).exec(function(err, image) {
 			if(err) return console.error(err);
-			res.json({images : [image]})
+			res.json({image : image})
 		});
 	}
+}
+
+function putComment(req, res) {
+	var id = req.params.id;
+
+	if (!id || !req.body.user || !req.body.body) {
+		res.sendStatus(400);
+	}
+	model.Image.find({_id, id}).exec(function(err, image) {
+			if(err) return console.error(err);
+
+			var comments = image[0].comments;
+			comments.push({
+				user: req.body.user,
+				body: req.body.body,
+				date: new Date()
+			})
+			model.Image.update({_id : image[0]._id}, {comments : comments}).exec(function(err, updatedImage)) {
+				if(err) return console.error(err);
+				res.json({image : updatedImage})
+			}
+	});
 }

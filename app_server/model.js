@@ -13,7 +13,12 @@ var imgSchema = new mongoose.Schema({
     date: Date,
     img: String,
     user: String,
-    caption: String
+    caption: String,
+		comments: [{
+			user: String,
+			body: String,
+			date: Date
+		}]
 });
 
 var authSchema = new mongoose.Schema({
