@@ -84,7 +84,7 @@ function putComment(req, res) {
 				if(err) return console.error(err);
 				model.Image.find({_id : id}).exec(function(err, result) {
 					if(err) return console.error(err);
-					res.json({image : result[0]});
+					res.json(result[0]);
 				});
 			});
 	});
