@@ -8,7 +8,7 @@ exports.setup = function(app) {
 	app.get('/img/:id*?', getImages)
 	app.post('/img', multer().single('image'), addImage)
 	app.put('/img/:id*?', putComment)
-	ap.get('/welcome', getWelcome)
+	app.get('/welcome', getWelcome)
 }
 
 function addImage(req, res) {
