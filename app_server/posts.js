@@ -59,7 +59,7 @@ function getImages(req, res) {
 	} else {
 		model.Image.find({_id : id}).exec(function(err, image) {
 			if(err) return console.error(err);
-			res.json({image : image})
+			res.json({image : image[0]})
 		});
 	}
 }
@@ -84,7 +84,7 @@ function putComment(req, res) {
 				if(err) return console.error(err);
 				model.Image.find({_id : id}).exec(function(err, result) {
 					if(err) return console.error(err);
-					res.json({image : result});
+					res.json({image : result[0]});
 				});
 			});
 	});
