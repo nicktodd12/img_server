@@ -9,6 +9,11 @@ exports.setup = function(app) {
 	app.post('/img', multer().single('image'), addImage)
 	app.put('/img/:id*?', putComment)
 	app.get('/welcome', getWelcome)
+	app.get('/nick', nick)
+}
+
+function nick(req, res) {
+    res.json({nick : "request file was NICK"});
 }
 
 function addImage(req, res) {
